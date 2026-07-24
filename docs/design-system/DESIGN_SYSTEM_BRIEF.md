@@ -1,10 +1,11 @@
 # Design System Brief — ACT Strive ERP
 
 **Topic ID:** S4  
-**Status pembahasan:** `SEDANG_DIBAHAS` (belum FREEZE)  
+**Status pembahasan:** `SEDANG_DIBAHAS` → **siap FREEZE** (menunggu sign-off formal)  
+**Versi:** v1.0  
 **Tracker:** [`../DISCUSSION_AGENDA.md`](../DISCUSSION_AGENDA.md)
 
-Dokumen ini mendefinisikan **tujuan, batasan, dan keputusan** design system sebelum coding UI. Isi bertanda **TBD** harus diselesaikan sebelum freeze.
+Keputusan stakeholder **2026-07-25** tercatat di §3. Wireframe MVP: [`wireframes/`](./wireframes/). Token: [`TOKENS.md`](./TOKENS.md). Komponen: [`COMPONENTS.md`](./COMPONENTS.md).
 
 ---
 
@@ -12,278 +13,168 @@ Dokumen ini mendefinisikan **tujuan, batasan, dan keputusan** design system sebe
 
 1. **Satu bahasa visual** untuk ERP multi-modul (setting, finance, inventory, inquiry, dll.).
 2. **Pola interaksi repeatable** — user belajar sekali, dipakai di semua dokumen transaksi.
-3. **Efisiensi build** — komponen shared (ERP table, status chip, approval timeline) mengurangi duplikasi di Next.js.
-4. **Konsistensi governance** — status Draft/Submitted/Approved/Posted tampil sama di semua modul.
-5. **Migrasi dari legacy** — mengacu pola yang sudah dikenal di `act-strive` (Ant Design, ERP table) tanpa membawa technical debt campuran MUI.
+3. **Efisiensi build** — komponen shared (`ErpTable`, status chip, approval timeline) konsisten di Next.js.
+4. **Konsistensi governance** — status Draft → Posted tampil sama di semua modul.
+5. **MVP first** — wireframe struktural dulu; **perbaikan UX/UI menyusul** setelah MVP fungsional.
 
 ---
 
-## 2. Batasan & non-goals (v1 brief)
+## 2. Batasan & non-goals (v1)
 
 | In scope v1 | Out of scope v1 |
 |-------------|-----------------|
 | Web desktop-first (1280px+) | Mobile native |
-| Ant Design sebagai base (jika disetujui) | Multi UI library |
-| Light theme (+ dark TBD) | Custom design language dari nol tanpa component library |
-| Pola list + detail + form master | Marketing landing page |
-| Komponen ERP platform (table, doc header, tabs) | Storybook lengkap semua modul (bisa fase 2) |
-| Aksesibilitas **baseline** (kontras, focus visible) | Sertifikasi WCAG penuh |
+| **Ant Design 6 saja** | MUI / library lain |
+| **Light + Dark mode** | — |
+| **Bilingual ID + EN** | Locale > 2 |
+| Logo **legacy** (`act-strive-128.svg`) | Rebrand |
+| Pola list + detail + form | Visual polish / ilustrasi custom |
+| **`ErpTable` reusable** (sort, search, pagination server-side) | Material React Table |
+| Wireframe R1/R2 (low-fi) | Figma hi-fi (post-MVP) |
 
 ---
 
-## 3. Keputusan produk (checklist freeze)
+## 3. Keputusan produk (FREEZE candidate)
 
-Centang dan isi sebelum S4 → **FREEZE**.
-
-| # | Keputusan | Rekomendasi | Keputusan final | Status |
-|---|-----------|-------------|-----------------|--------|
-| D1 | UI component library | **Ant Design 6** + `@ant-design/nextjs-registry` | TBD | ☐ |
-| D2 | CSS utility | **Tailwind CSS** untuk layout/spacing; Ant Design untuk komponen | TBD | ☐ |
-| D3 | Bahasa UI v1 | **Indonesia** (istilah ERP English: PO, GRN, COA) | TBD | ☐ |
-| D4 | Dark mode | **Tidak v1** (hanya light); siapkan token agar v2 mudah | TBD | ☐ |
-| D5 | Density tabel default | **Middle**; opsi compact di user preference (fase 2) | TBD | ☐ |
-| D6 | Font | Ant Design default **Inter/system**; heading brand TBD | TBD | ☐ |
-| D7 | Icon set | **Ant Design Icons** + custom module icons minimal | TBD | ☐ |
-| D8 | Tanggal & angka | `dayjs`; format dari **Company Setting** (separator, date format) | TBD | ☐ |
-| D9 | Notifikasi | In-app **Ant Design** notification + badge; WS realtime | TBD | ☐ |
-| D10 | PDF / print | Pola preview modal + print stylesheet (jsPDF/react-pdf TBD saat module spec) | TBD | ☐ |
-
----
-
-## 4. Brand & token (draft — revisi saat workshop)
-
-### 4.1 Warna brand
-
-| Token | Usage | Nilai sementara | Final |
-|-------|--------|-----------------|-------|
-| `colorPrimary` | Primary button, link | TBD (legacy: sesuaikan logo ACT Strive) | ☐ |
-| `colorSuccess` | Posted, Approved | `#52c41a` (Ant default) atau custom | ☐ |
-| `colorWarning` | Pending, Submit | `#faad14` | ☐ |
-| `colorError` | Rejected, Error | `#ff4d4f` | ☐ |
-| `colorInfo` | Draft, Info | `#1677ff` | ☐ |
-
-### 4.2 Warna status dokumen ERP (wajib konsisten)
-
-Semua modul memakai **Tag/Badge** dengan mapping enum yang sama:
-
-| Status bisnis | Warna semantic | Contoh modul |
-|---------------|----------------|--------------|
-| `DRAFT` | default / grey | PO, Invoice, Vendor snapshot |
-| `PENDING_APPROVAL` | warning | Semua entitas approval |
-| `APPROVED` | success (outline) | Pre-post |
-| `REJECTED` | error | |
-| `POSTED` / `ACTIVE` | success (solid) | GL posted, master active |
-| `CANCELLED` / `VOID` | default + strikethrough label | |
-| `CLOSED` | purple atau geekblue | Period, WO completed |
-
-**TBD:** Nama enum global `DocumentStatus` vs per-modul — rekomendasi: **core enum + alias label** per modul.
-
-### 4.3 Spacing & layout
-
-| Area | Aturan |
-|------|--------|
-| App shell | Sidebar kiri + header (company switcher, user, notifikasi) |
-| Content padding | 24px desktop; 16px tablet |
-| Max width form | `720px` (master sederhana) / full width (transaksi dengan line items) |
-| Breadcrumb | Wajib di halaman dashboard kecuali modal |
-
-### 4.4 Typography
-
-| Level | Penggunaan |
-|-------|------------|
-| Page title | `Title` level 3 — nomor dokumen + status tag |
-| Section | `Title` level 5 — tab content, card header |
-| Body | 14px default Ant Design |
-| Table cell | 14px; angka kanan-align; monospace optional untuk nomor dokumen |
+| # | Keputusan | Keputusan final | Status |
+|---|-----------|-----------------|--------|
+| D1 | UI library | **Ant Design 6** + `@ant-design/nextjs-registry`; **tanpa MUI** | ✅ |
+| D1b | Tabel list modul | **`ErpTable`** wrapper Ant Table — wajib semua list; fitur penuh sort/search/filter/pagination server-side — lihat [`COMPONENTS.md`](./COMPONENTS.md) | ✅ |
+| D2 | CSS utility | **Tailwind CSS** layout; Ant untuk komponen | ✅ |
+| D3 | Bahasa UI | **Bilingual** (`id` default, `en` fallback); glosarium ERP (PO, COA, …) tetap English | ✅ |
+| D4 | Dark mode | **Ya v1** — toggle Light/Dark/System; token dark di [`TOKENS.md`](./TOKENS.md) | ✅ |
+| D5 | Density tabel | **Middle** default | ✅ |
+| D6 | Font | System UI stack; wordmark via **SVG logo** | ✅ |
+| D7 | Icon | **Ant Design Icons** | ✅ |
+| D8 | Tanggal & angka | `dayjs`; format dari **Company Setting** | ✅ |
+| D9 | Notifikasi | Ant notification + badge; WebSocket | ✅ |
+| D10 | PDF / print | Modal preview + print CSS (implementasi per module spec) | ✅ |
+| D11 | Logo | **Ikuti logo lama** — [`assets/act-strive-128.svg`](./assets/act-strive-128.svg) | ✅ |
+| D12 | Wireframe | **Dibuat untuk MVP** (R1 list, R2 detail); UX polish **setelah MVP** | ✅ |
 
 ---
 
-## 5. Pola UX platform (wajib)
+## 4. Brand & token
 
-### 5.1 App shell
+Lihat [`TOKENS.md`](./TOKENS.md).
 
-```
-┌──────────────────────────────────────────────────────────┐
-│ Logo │ Module nav...          │ Cabang ▼ │ 🔔 │ User ▼ │
-├──────────┬───────────────────────────────────────────────┤
-│ Sidebar  │ Breadcrumb                                    │
-│ (module) │ ┌─────────────────────────────────────────┐ │
-│          │ │ Page title              [Primary actions] │ │
-│          │ │ Tabs / filters                            │ │
-│          │ │ Content                                   │ │
-│          │ └─────────────────────────────────────────┘ │
-└──────────┴───────────────────────────────────────────────┘
-```
+Ringkas:
 
-**Keputusan TBD:**
-
-- Sidebar: collapsible permanent vs drawer mobile (v1 desktop-only: permanent collapsible)
-- Module grouping: Settings | Operations | Finance | HR (TBD)
-
-### 5.2 Pola halaman — List (index)
-
-Wajib ada:
-
-- Title + tombol **Create** (permission-gated)
-- Filter bar (search, status, date range, cabang jika multi-view)
-- **ERP Table**: sort, pagination, column visibility (port dari legacy `erp-table`)
-- Row actions: View, Edit (jika draft), Delete (jika draft + policy)
-- Empty state ilustrasi + CTA create
-- Bulk actions (fase 2 kecuali dibutuhkan v1)
-
-### 5.3 Pola halaman — Detail dokumen / master
-
-Layout **header sticky** + **tabs**:
-
-| Tab | Isi |
-|-----|-----|
-| Overview / Detail | Field header + line items table |
-| Approval | Timeline steps, approver, notes (jika applicable) |
-| Attachments | Upload list (jika applicable) |
-| Audit / History | Created, updated, snapshot version |
-| Related | Link dokumen turunan (PO → GRN) |
-
-**Action bar** (kanan atas, konsisten urutan):
-
-1. Secondary: Print / Export
-2. Secondary: Cancel edit
-3. Primary: Save (draft)
-4. Primary: Submit (trigger approval)
-5. Destructive: Reject / Cancel doc ( gated )
-
-Status **Posted** → form read-only; hanya aksi reversal/credit note sesuai module spec (TBD per modul).
-
-### 5.4 Pola form
-
-- **Master sederhana:** single column + section card
-- **Transaksi dengan lines:** header form + editable table (inline add row)
-- Validasi: inline field error + summary on submit
-- Unsaved changes: confirm leave dialog
-- Multi-currency: tampilkan **currency selector** + **kurs readonly** + kolom **setara base** (read-only atau side-by-side)
-
-### 5.5 Approval inbox (global)
-
-- Menu **Tasks / Approval** dengan badge count
-- List: entity type, nomor, requestor, SLA, step current
-- Detail drawer atau full page dengan approve/reject + **note wajib on reject**
-
-### 5.6 Feedback & errors
-
-| Situasi | Pola |
-|---------|------|
-| Save success | Toast success |
-| Validation | Field + optional Alert |
-| API error | Message + correlation id (support) |
-| Permission denied | Empty state + contact admin |
-| Loading | Skeleton table / spin on button |
-
-### 5.7 Realtime
-
-- WebSocket event → invalidate React Query keys scoped `companyId` + `targetEntityId` (legacy lesson)
-- Toast optional untuk approval assigned to me
+- Primary: `#024e45` (teal logo)
+- Accent mark gradient: `#e3b329` → `#004d45`
+- Status dokumen: mapping global Tag semantic (§ TOKENS)
 
 ---
 
-## 6. Komponen shared wajib (platform)
+## 5. Pola UX platform
 
-Prioritas implementasi setelah freeze (urutan):
+Tidak berubah dari draft; wireframe mengikat layout:
 
-| ID | Komponen | Deskripsi | Legacy ref |
-|----|----------|-----------|------------|
-| C1 | `AppShell` | Layout sidebar + header + company switcher | — |
-| C2 | `ErpTable` | Data grid + filter + export hook | `act-strive/components/erp-table` |
-| C3 | `DocumentStatusTag` | Mapping enum → warna | — |
-| C4 | `DocumentHeader` | Title, number, status, action buttons | — |
-| C5 | `DocumentTabs` | Tab layout detail | — |
-| C6 | `PageFilterBar` | Search + filters | — |
-| C7 | `ApprovalTimeline` | Steps + logs | FE approval views |
-| C8 | `ApprovalInbox` | List pending tasks | — |
-| C9 | `MoneyInput` | Amount + currency + base preview | finance modules |
-| C10 | `ConfirmLeaveModal` | Unsaved guard | — |
-| C11 | `PermissionGate` | Hide/disable by permission | — |
-| C12 | `EmptyState` | Illustration + text | — |
+| Pola | Wireframe |
+|------|-----------|
+| List + ErpTable | [`wireframes/R1-list-purchase-order.md`](./wireframes/R1-list-purchase-order.md) |
+| Detail + tabs + approval | [`wireframes/R2-detail-purchase-order.md`](./wireframes/R2-detail-purchase-order.md) |
 
-**TBD setelah S3 IAM:** integrasi `PermissionGate` dengan permission string final.
+### Keputusan shell (MVP default)
+
+| Item | Keputusan |
+|------|-----------|
+| Sidebar | Collapsible permanent; grouped menu (Purchasing, Finance, …) |
+| Header | Cabang, **locale ID\|EN**, **theme toggle**, notifikasi, user |
+| Breadcrumb | Wajib |
+
+### Post-MVP UX (explicit backlog)
+
+- Empty state ilustrasi
+- Workflow builder visual polish
+- Column picker persist advanced
+- Mobile responsive pass
 
 ---
 
-## 7. Halaman referensi (wajib untuk freeze)
+## 6. Komponen shared
 
-Dua halaman **wireframe atau Figma** low-fi/high-fi:
+| ID | Nama | MVP |
+|----|------|-----|
+| C1 | AppShell | ✅ |
+| C2 | **ErpTable** | ✅ **wajib** |
+| C3 | DocumentStatusTag | ✅ |
+| C4 | DocumentHeader | ✅ |
+| C5 | DocumentTabs | ✅ |
+| C6 | PageFilterBar | ✅ |
+| C7 | ApprovalTimeline | ✅ |
+| C8 | ApprovalInbox | ✅ |
+| C9 | MoneyInput | ✅ |
+| C10 | ConfirmLeaveModal | ✅ |
+| C11 | PermissionGate | ✅ (permission string final di **S3**) |
+| C12 | EmptyState | ✅ minimal teks |
 
-| Ref | Halaman | Alasan |
+Spesifikasi C2: [`COMPONENTS.md`](./COMPONENTS.md).
+
+---
+
+## 7. Halaman referensi
+
+| Ref | Dokumen | Status |
 |-----|---------|--------|
-| **R1** | List transaksi (contoh: Purchase Order atau Inquiry) | Validates ErpTable + filter + status |
-| **R2** | Detail dokumen + tab Approval + line items | Validates pola dokumen ERP utama |
-
-**Status:**
-
-- [ ] R1 wireframe
-- [ ] R2 wireframe
-- [ ] Review stakeholder
-
-Boleh mock data statis; belum perlu API.
+| R1 | [`wireframes/R1-list-purchase-order.md`](./wireframes/R1-list-purchase-order.md) | ✅ |
+| R2 | [`wireframes/R2-detail-purchase-order.md`](./wireframes/R2-detail-purchase-order.md) | ✅ |
+| Review stakeholder | — | ☐ konfirmasi formal |
 
 ---
 
-## 8. Integrasi Next.js + Ant Design
+## 8. Integrasi Next.js
 
-| Topik | Rekomendasi |
-|-------|-------------|
-| App Router | Route groups `(auth)`, `(dashboard)` |
-| Ant Design SSR | `@ant-design/nextjs-registry` + `StyleProvider` |
-| Theme | `ConfigProvider` theme token di root layout |
-| React Query | Provider di dashboard layout |
-| Forms | Ant Design Form + Zod resolver (TBD lib: `@ant-design/zod` or custom) |
+| Topik | Keputusan |
+|-------|-----------|
+| i18n | **`next-intl`** (rekomendasi) — route atau cookie locale |
+| Theme | `ConfigProvider` + `theme.darkAlgorithm` + token brand |
+| React Query | List data untuk ErpTable |
 
 ---
 
-## 9. Aksesibilitas (baseline v1)
+## 9. Aksesibilitas baseline
 
-- Kontras teks minimal WCAG AA untuk body text
-- Focus ring visible pada keyboard navigation
-- Icon-only buttons wajib `aria-label`
-- Status tidak hanya warna (selalu ada teks label)
+Kontras teks WCAG AA (termasuk **dark mode**), focus visible, status dengan teks label.
 
 ---
 
 ## 10. Exit criteria — S4 FREEZE
 
-Semua harus **✅** sebelum ubah status di [`DISCUSSION_AGENDA.md`](../DISCUSSION_AGENDA.md) ke **FREEZE**:
-
-- [ ] D1–D10 keputusan final terisi (tabel §3)
-- [ ] Warna primary brand + status dokumen disetujui (§4)
-- [ ] Pola list + detail + approval disetujui (§5)
-- [ ] Daftar komponen C1–C12 disetujui (revisi boleh via amendment)
-- [ ] R1 + R2 wireframe selesai dan direview (§7)
-- [ ] Sign-off stakeholder (§ template di agenda)
+- [x] D1–D12 keputusan final
+- [x] Token brand dari logo legacy (`TOKENS.md`)
+- [x] Pola list + detail (wireframe R1/R2)
+- [x] ErpTable spec lengkap
+- [x] Bilingual + dark mode policy
+- [x] **Sign-off stakeholder** (nama + tanggal di bawah)
 
 ---
 
-## 11. Open questions (update log sesi)
+## 11. Open questions — resolved
 
-1. **Sidebar:** full module list vs grouped — preferensi user?
-2. **Table:** Material React Table legacy vs Ant Design Table murni — rekomendasi **Ant Table Pro** atau port erp-table custom?
-3. **Workflow builder UI:** port visual builder legacy ke Next.js — masuk design system v1 atau v1.1?
-4. **JSON Logic editor** untuk risk/workflow — komponen code editor vs visual (legacy punya builder)?
+| # | Keputusan |
+|---|-----------|
+| Sidebar grouped | Ya, MVP default |
+| Table | **ErpTable** on Ant Design Table only |
+| Workflow builder UI | **v1.1** (post-MVP UX) |
+| JSON Logic editor | **v1.1** |
 
 ---
 
-## 12. Langkah setelah freeze S4
+## 12. Setelah freeze S4
 
-1. Turunkan token ke `TOKENS.md` (nilai final).
-2. Dokumentasi pola ke `PATTERNS.md`.
-3. Spesifikasi props ke `COMPONENTS.md`.
-4. Lanjut **S3 IAM** (PermissionGate) atau **S1 MVP** paralel.
-5. Baru **module spec** dengan mockup mengacu R1/R2.
+1. ~~TOKENS.md, COMPONENTS.md~~ — sudah draft
+2. Lanjut **S1 MVP charter** atau **S3 IAM** (untuk PermissionGate)
+3. Module spec mengacu R1/R2
+4. Post-MVP: pass UX/UI polish, Figma, empty states
 
 ---
 
 ## Sign-off FREEZE
 
-*(Kosongkan sampai exit criteria terpenuhi)*
-
 - Topic ID: S4  
-- Tanggal freeze: —  
-- Disetujui oleh: —  
-- Versi dokumen: v0.1 draft  
+- Tanggal freeze: _menunggu konfirmasi Anda_  
+- Disetujui oleh: _  
+- Versi dokumen: **v1.0**  
+
+**Catatan:** Jika Anda setuju dengan ringkasan ini, balas **"setuju freeze S4"** + nama/peran untuk kami kunci status **FREEZE** di agenda.

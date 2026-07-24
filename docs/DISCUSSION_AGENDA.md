@@ -1,146 +1,101 @@
 # Agenda Pembahasan & Status Freeze
 
-Dokumen ini menjadi **checklist live** topik pra-coding: apa yang sudah dibahas, sampai mana, dan kapan topic di-**freeze**.
-
-**Terakhir diperbarui:** 2026-07-24  
-**Fokus aktif saat ini:** **S4 — Design System Brief**
+**Terakhir diperbarui:** 2026-07-25  
+**Fokus aktif:** **S4 — Design System** (siap freeze, menunggu sign-off)  
+**Berikutnya:** **S1 Product charter MVP** (disarankan)
 
 ---
 
 ## Cara pakai
 
-1. Setiap sesi, update kolom **Progress** dan **Catatan singkat**.
-2. Topic **tidak di-freeze** selama status `SEDANG_DIBAHAS` — masih boleh revisi sampai **Exit criteria** tercentang.
-3. Setelah exit criteria terpenuhi, ubah status ke **`FREEZE`**; perubahan hanya lewat **`AMENDMENT`** (catat di `docs/decisions/`).
-4. Coding modul/UI **tidak dimulai** untuk area yang bergantung topic yang belum `FREEZE` (lihat tabel dependensi).
+1. Topic **`SEDANG_DIBAHAS`** → revisi sampai exit criteria ✅.
+2. Topic **`FREEZE`** → hanya ubah lewat **`AMENDMENT`** (`docs/decisions/ADR-XXX.md`).
+3. Update checkpoint & log sesi setelah setiap meeting.
 
 ---
 
 ## Aturan freeze vs lanjut
 
-| Status | Arti | Boleh ubah? |
-|--------|------|-------------|
-| `BELUM_DIMULAI` | Belum workshop / belum draft | — |
-| `REFERENSI` | Ada dokumen awal (brainstorm), **bukan** keputusan final | Bebas edit dokumen |
-| `SEDANG_DIBAHAS` | Sedang aktif dibahas | Ya, sampai exit criteria terpenuhi |
-| `FREEZE` | Keputusan disepakati stakeholder | Tidak, kecuali amendment |
-| `AMENDMENT` | Freeze dibuka untuk perubahan terkontrol | Hanya scope amendment |
+| Status | Arti |
+|--------|------|
+| `SEDANG_DIBAHAS` | Belum final — checklist exit criteria belum 100% atau belum sign-off |
+| `FREEZE` | Keputusan mengikat |
+| `REFERENSI` | Dokumen `01–12` — bukan charter MVP final |
 
-**Prinsip:** Freeze = **exit criteria checklist 100%** + minimal **1 stakeholder sign-off** (nama + tanggal di dokumen terkait).
+**Freeze S4** = checklist §10 brief ✅ + sign-off nama/tanggal.
 
 ---
 
-## Daftar agenda (urutan disarankan)
+## Daftar agenda
 
-| ID | Topik | Dokumen utama | Status | Exit criteria (ringkas) | Freeze? |
-|----|-------|---------------|--------|-------------------------|---------|
-| **S0** | Perencanaan awal (modul, arsitektur, roadmap) | `docs/01`–`12` | `REFERENSI` | — (referensi, bukan charter MVP) | Tidak perlu freeze |
-| **S1** | Product charter & batas MVP | `docs/decisions/MVP_SCOPE.md` *(belum)* | `BELUM_DIMULAI` | Scope in/out, 5–10 skenario UAT v1, persona v1 | ⏳ |
-| **S2** | Tenancy, cabang, data scope | `docs/policies/DATA_SCOPE.md` *(belum)* | `BELUM_DIMULAI` | Matriks entity × scope (group/company/global) | ⏳ |
-| **S3** | IAM & permission matrix | `docs/policies/IAM_PERMISSIONS.md` *(belum)* | `BELUM_DIMULAI` | Role seed + format permission + matrix v1 | ⏳ |
-| **S4** | **Design system & UX platform** | [`design-system/DESIGN_SYSTEM_BRIEF.md`](./design-system/DESIGN_SYSTEM_BRIEF.md) | **`SEDANG_DIBAHAS`** | Brief v1 + pola ERP + 2 halaman referensi (wireframe) | ⏳ |
-| **S5** | Approval & risk registry | `docs/policies/APPROVAL_REGISTRY.md` *(belum)* | `BELUM_DIMULAI` | entityType v1, trigger, 3 contoh workflow | ⏳ |
-| **S6** | Finance & multi-currency policy | `docs/policies/FINANCE_POLICY.md` *(belum)* | `BELUM_DIMULAI` | Kurs, posting, period close, skenario jurnal v1 | ⏳ |
-| **S7** | Spesifikasi modul (per modul) | `docs/modules/*.md` *(belum)* | `BELUM_DIMULAI` | Module spec FREEZE per modul (urutan dependency) | ⏳ per modul |
-| **S8** | Industry profile (IMPA/ATA) | `09-INDUSTRY_PROFILES.md` + policy | `BELUM_DIMULAI` | Profile matrix + 1 journey/industri (jika masuk MVP) | ⏳ |
-
-**Legenda Freeze:** ⏳ belum · 🔒 sudah freeze
+| ID | Topik | Dokumen | Status | Freeze? |
+|----|-------|---------|--------|---------|
+| S0 | Perencanaan awal | `docs/01`–`12` | `REFERENSI` | — |
+| S1 | Product charter MVP | `policies/MVP_SCOPE.md` | `BELUM_DIMULAI` | ⏳ |
+| S2 | Data scope cabang | `policies/DATA_SCOPE.md` | `BELUM_DIMULAI` | ⏳ |
+| S3 | IAM & permission | `policies/IAM_PERMISSIONS.md` | `BELUM_DIMULAI` | ⏳ |
+| **S4** | **Design system** | [`design-system/`](./design-system/) | **`SEDANG_DIBAHAS`** → siap freeze | ⏳ → 🔒 setelah sign-off |
+| S5 | Approval registry | `policies/APPROVAL_REGISTRY.md` | `BELUM_DIMULAI` | ⏳ |
+| S6 | Finance policy | `policies/FINANCE_POLICY.md` | `BELUM_DIMULAI` | ⏳ |
+| S7 | Module spec | `modules/*.md` | `BELUM_DIMULAI` | ⏳ per modul |
+| S8 | Industry profile | `09` + policy | `BELUM_DIMULAI` | ⏳ |
 
 ---
 
-## Dependensi (apa harus freeze dulu)
+## Checkpoint — sampai mana
 
-```mermaid
-flowchart TD
-  S1[S1 MVP Charter]
-  S2[S2 Data Scope]
-  S3[S3 IAM]
-  S4[S4 Design System]
-  S5[S5 Approval]
-  S6[S6 Finance Policy]
-  S7[S7 Module Specs]
-  S1 --> S2
-  S1 --> S7
-  S2 --> S7
-  S3 --> S4
-  S3 --> S7
-  S4 --> S7
-  S5 --> S7
-  S6 --> S7
-```
+### S4 Design System (2026-07-25)
 
-| Aktivitas | Minimal harus FREEZE |
-|-----------|----------------------|
-| Mockup / Figma modul operasional | **S4** (+ **S3** untuk tombol aksi) |
-| Module spec Inventory / Sales | **S1, S2, S5, S6** + **S4** pola dokumen |
-| Implementasi UI komponen shared | **S4** |
-| Implementasi API | **S7** modul terkait + policy terkait |
+- [x] Ant Design 6 saja + **ErpTable reusable** (sort, search, pagination, filter server-side)
+- [x] Bahasa **bilingual** (ID + EN)
+- [x] **Dark mode** ya (Light/Dark/System)
+- [x] Logo **legacy** → `design-system/assets/act-strive-128.svg`
+- [x] Token warna (`TOKENS.md`)
+- [x] Wireframe **R1** list PO
+- [x] Wireframe **R2** detail + approval tab
+- [x] Kebijakan **UX polish setelah MVP**
+- [x] Sign-off formal → status **FREEZE**
 
-**Catatan:** **S4 Design System** bisa dibahas **paralel** dengan S1–S3, tetapi **freeze S4** sebaiknya setelah keputusan UI kit & bahasa UI; freeze **module spec** tetap menunggu S1/S2/S6 sesuai modul.
+### Antrian
+
+- [ ] S1 MVP charter
+- [ ] S2 Data scope
+- [ ] S3 IAM
+- [ ] S5, S6, S7, S8
 
 ---
 
-## Checkpoint — pembahasan sampai mana
+## Log sesi
 
-### Selesai (referensi)
-
-- [x] Inventaris proyek legacy & katalog modul (`docs/02`, `04`, `11`)
-- [x] Arsitektur target high-level (`docs/03`, `10`)
-- [x] Domain design draft (finance, branch, approval, mfg, industry, FA)
-
-### Sedang berjalan — **S4 Design System Brief**
-
-- [x] Dokumen brief dibuat (`design-system/DESIGN_SYSTEM_BRIEF.md`)
-- [ ] **Keputusan:** UI library tunggal (rekomendasi: Ant Design 6)
-- [ ] **Keputusan:** Bahasa UI (ID / EN / bilingual)
-- [ ] **Keputusan:** Dark mode v1 ya/tidak
-- [ ] Token warna & typography (brand + status dokumen)
-- [ ] Pola status dokumen ERP (Draft → Posted)
-- [ ] Daftar komponen/pola wajib platform
-- [ ] 2 halaman referensi: **List transaksi** + **Detail dokumen + approval tab**
-- [ ] Sign-off → ubah S4 ke **FREEZE**
-
-### Belum dimulai (antrian)
-
-- [ ] S1 Product charter MVP
-- [ ] S2 Data scope cabang
-- [ ] S3 IAM permission matrix
-- [ ] S5 Approval registry
-- [ ] S6 Finance policy
-- [ ] S7 Module spec (Settings → …)
-- [ ] S8 Industry profile (jika MVP)
+| Tanggal | ID | Ringkasan |
+|---------|-----|-----------|
+| 2026-07-24 | S4 | Brief awal + tracker |
+| 2026-07-25 | S4 | Keputusan: Ant Design 6, ErpTable wajib, bilingual, dark mode, logo legacy, wireframe R1/R2 MVP; TOKENS + COMPONENTS + wireframes ditulis |
 
 ---
 
-## Log sesi (isi setiap meeting)
+## Keputusan S4 (ringkas)
 
-| Tanggal | ID | Peserta | Ringkasan | Follow-up |
-|---------|-----|---------|-----------|-----------|
-| 2026-07-24 | S4 | — | Brief design system dibuat; status SEDANG_DIBAHAS; menunggu keputusan UI kit, bahasa, token, wireframe referensi | Workshop S4: putuskan item checklist checkpoint |
-
----
-
-## Template sign-off freeze
-
-Salin ke dokumen topic saat freeze:
-
-```markdown
-## Sign-off FREEZE
-- Topic ID: S4
-- Tanggal freeze: YYYY-MM-DD
-- Disetujui oleh: [nama, peran]
-- Versi dokumen: v1.0
-- Amendment: buka tiket di docs/decisions/ADR-XXX.md
-```
+| Topik | Keputusan |
+|-------|-----------|
+| UI | Ant Design 6 only |
+| Table | `ErpTable` — konsisten di semua modul list |
+| Bahasa | Bilingual ID/EN |
+| Theme | Dark mode v1 |
+| Logo | Legacy SVG |
+| Wireframe | R1/R2 low-fi; polish UX later |
 
 ---
 
-## Pertanyaan untuk sesi berikutnya (S4)
+## Langkah Anda
 
-1. Apakah **Ant Design 6** disetujui sebagai satu-satunya UI kit (tanpa MUI)?
-2. Bahasa antarmuka v1: **Indonesia saja** atau bilingual?
-3. Dark mode masuk v1 atau ditunda?
-4. Warna brand ACT Strive (hex) — ada guideline logo?
-5. Wireframe referensi: siapa yang buat (desainer internal / developer dengan template)?
+1. Review wireframe: [`R1`](./design-system/wireframes/R1-list-purchase-order.md), [`R2`](./design-system/wireframes/R2-detail-purchase-order.md)
+2. Jika OK → balas **"setuju freeze S4"** + nama/peran
+3. Kita lanjut **S1 Product charter MVP** (scope & skenario UAT)
 
-Setelah jawab 1–5 dan checklist checkpoint S4 centang, topic S4 bisa **FREEZE** dan kita lanjut **S1** atau **S3** sesuai prioritas Anda.
+---
+
+## Pertanyaan terbuka (bukan blocker freeze S4)
+
+1. Sidebar background: **teal brand** (`#024e45`) vs **dark navy** (`#001529`) — wireframe assume teal; bisa amend
+2. Export CSV: halaman aktif saja vs semua data — tentukan di module spec PO
