@@ -30,6 +30,16 @@ Referensi kode dan desain lama ada di:
 | [`11-IMPLEMENTATION_ROADMAP.md`](./11-IMPLEMENTATION_ROADMAP.md) | Fase implementasi, prioritas, exit criteria |
 | [`12-FIXED_ASSET.md`](./12-FIXED_ASSET.md) | Aset berwujud/tidak berwujud, prepaid, depresiasi/amortisasi |
 
+### Pra-coding (agenda & desain)
+
+| File | Isi singkat |
+|------|-------------|
+| [`DISCUSSION_AGENDA.md`](./DISCUSSION_AGENDA.md) | **Tracker pembahasan**, status freeze, checkpoint |
+| [`design-system/DESIGN_SYSTEM_BRIEF.md`](./design-system/DESIGN_SYSTEM_BRIEF.md) | Brief design system (**S4 — sedang dibahas**) |
+| [`modules/MODULE_SPEC_TEMPLATE.md`](./modules/MODULE_SPEC_TEMPLATE.md) | Template spesifikasi modul (S7) |
+| [`decisions/`](./decisions/) | ADR setelah freeze |
+| [`policies/`](./policies/) | MVP, data scope, IAM, finance policy |
+
 ---
 
 ## Konvensi penulisan
