@@ -4,7 +4,7 @@ Dokumen kebijakan yang harus **FREEZE** sebelum module spec operasional:
 
 | File | Topic agenda | Status |
 |------|--------------|--------|
-| `MVP_SCOPE.md` | S1 | belum |
+| [`MVP_SCOPE.md`](./MVP_SCOPE.md) | S1 | **SEDANG_DIBAHAS** (draft v0.1) |
 | `DATA_SCOPE.md` | S2 | belum |
 | `IAM_PERMISSIONS.md` | S3 | belum |
 | `APPROVAL_REGISTRY.md` | S5 | belum |

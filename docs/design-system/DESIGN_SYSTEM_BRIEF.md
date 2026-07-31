@@ -1,7 +1,7 @@
 # Design System Brief — ACT Strive ERP
 
 **Topic ID:** S4  
-**Status pembahasan:** `SEDANG_DIBAHAS` → **siap FREEZE** (menunggu sign-off formal)  
+**Status:** **`FREEZE`** (ADR-001)  
 **Versi:** v1.0  
 **Tracker:** [`../DISCUSSION_AGENDA.md`](../DISCUSSION_AGENDA.md)
 
@@ -173,8 +173,7 @@ Kontras teks WCAG AA (termasuk **dark mode**), focus visible, status dengan teks
 ## Sign-off FREEZE
 
 - Topic ID: S4  
-- Tanggal freeze: _menunggu konfirmasi Anda_  
-- Disetujui oleh: _  
+- Tanggal freeze: **2026-07-25**  
+- Disetujui oleh: **Ali Shoddiqien**  
 - Versi dokumen: **v1.0**  
-
-**Catatan:** Jika Anda setuju dengan ringkasan ini, balas **"setuju freeze S4"** + nama/peran untuk kami kunci status **FREEZE** di agenda.
+- ADR: [`../decisions/ADR-001-freeze-design-system-s4.md`](../decisions/ADR-001-freeze-design-system-s4.md)

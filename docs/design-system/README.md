@@ -2,7 +2,7 @@
 
 | File | Status |
 |------|--------|
-| [`DESIGN_SYSTEM_BRIEF.md`](./DESIGN_SYSTEM_BRIEF.md) | v1.0 — **siap FREEZE** (sign-off pending) |
+| [`DESIGN_SYSTEM_BRIEF.md`](./DESIGN_SYSTEM_BRIEF.md) | v1.0 — **FREEZE** (ADR-001) |
 | [`TOKENS.md`](./TOKENS.md) | Brand + light/dark |
 | [`COMPONENTS.md`](./COMPONENTS.md) | **ErpTable** spec wajib |
 | [`assets/act-strive-128.svg`](./assets/act-strive-128.svg) | Logo legacy |
